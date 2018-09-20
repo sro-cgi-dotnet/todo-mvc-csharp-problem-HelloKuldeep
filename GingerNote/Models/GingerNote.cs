@@ -2,7 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 namespace GingerNote.Models{
     public class GingerNoteC{
-        public int Id { get; set; }
+        [Key]
+        public int NoteId { get; set; }
         [Required]
         public string NoteTitle { get; set; }
         public string NoteBody { get; set; }
@@ -11,10 +12,11 @@ namespace GingerNote.Models{
         // public List<Label> NoteLabel { get; set; }
     }
     public class Checklist{
+        [Key]
         public int ChecklistId { get; set; }
         public bool IsChecked { get; set; }
         public string ChecklistName { get; set; }
-        public int Id { get; set; }
+        public int NoteId { get; set; }
     }
     // public class Label{
     //     public int LabelId { get; set; }

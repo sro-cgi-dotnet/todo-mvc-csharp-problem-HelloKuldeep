@@ -32,7 +32,7 @@ namespace GingerNote.Models{
         //     return Lc;           
         // }
         public bool PostNote(GingerNoteC c){
-            if( context.GingerNoteT.FirstOrDefault( n => n.Id == c.Id) == null ){
+            if( context.GingerNoteT.FirstOrDefault( n => n.NoteId == c.NoteId) == null ){
                 context.GingerNoteT.Add(c);
                 PostCheckList(c);
                 context.SaveChanges();
@@ -40,8 +40,8 @@ namespace GingerNote.Models{
             }
             return false;
         }
-        public void PostCheckList(GingerNoteC c){
-            if( c.NoteChecklist == null ){
+        void PostCheckList(GingerNoteC c){
+            if( c.NoteChecklist != null ){
                 foreach(Checklist cl in c.NoteChecklist){
                     context.ChecklistT.Add(cl);
                 }
