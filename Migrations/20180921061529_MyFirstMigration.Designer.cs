@@ -3,14 +3,16 @@ using GingerNote.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GingerNote.Migrations
 {
     [DbContext(typeof(GingerNoteContext))]
-    partial class GingerNoteContextModelSnapshot : ModelSnapshot
+    [Migration("20180921061529_MyFirstMigration")]
+    partial class MyFirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,10 +57,35 @@ namespace GingerNote.Migrations
                     b.ToTable("GingerNoteT");
                 });
 
+            modelBuilder.Entity("GingerNote.Models.Label", b =>
+                {
+                    b.Property<int>("LabelId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LabelName");
+
+                    b.Property<int>("NoteId");
+
+                    b.HasKey("LabelId");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("LabelT");
+                });
+
             modelBuilder.Entity("GingerNote.Models.Checklist", b =>
                 {
                     b.HasOne("GingerNote.Models.GingerNoteC")
                         .WithMany("NoteChecklist")
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("GingerNote.Models.Label", b =>
+                {
+                    b.HasOne("GingerNote.Models.GingerNoteC")
+                        .WithMany("NoteLabel")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

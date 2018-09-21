@@ -9,7 +9,7 @@ namespace GingerNote.Models{
         public string NoteBody { get; set; }
         public bool Pinned { get; set; }
         public List<Checklist> NoteChecklist { get; set; }
-        // public List<Label> NoteLabel { get; set; }
+        public List<Label> NoteLabel { get; set; }
     }
     public class Checklist{
         [Key]
@@ -18,8 +18,9 @@ namespace GingerNote.Models{
         public string ChecklistName { get; set; }
         public int NoteId { get; set; }
     }
-    // public class Label{
-    //     public int LabelId { get; set; }
-    //     public string LabelName { get; set; }
-    // }
+    public class Label{
+        public int LabelId { get; set; }
+        public string LabelName { get; set; }
+        public int NoteId { get; set; }
+    }
 }

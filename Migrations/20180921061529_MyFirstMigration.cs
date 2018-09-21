@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GingerNote.Migrations
 {
-    public partial class CreateGingertest2DB : Migration
+    public partial class MyFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,9 +43,34 @@ namespace GingerNote.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LabelT",
+                columns: table => new
+                {
+                    LabelId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    LabelName = table.Column<string>(nullable: true),
+                    NoteId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LabelT", x => x.LabelId);
+                    table.ForeignKey(
+                        name: "FK_LabelT_GingerNoteT_NoteId",
+                        column: x => x.NoteId,
+                        principalTable: "GingerNoteT",
+                        principalColumn: "NoteId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ChecklistT_NoteId",
                 table: "ChecklistT",
+                column: "NoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LabelT_NoteId",
+                table: "LabelT",
                 column: "NoteId");
         }
 
@@ -53,6 +78,9 @@ namespace GingerNote.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ChecklistT");
+
+            migrationBuilder.DropTable(
+                name: "LabelT");
 
             migrationBuilder.DropTable(
                 name: "GingerNoteT");
