@@ -16,13 +16,11 @@ namespace GingerNote.Models{
                                     .ToList();
             return Lg;
         }
-        public List<GingerNoteC> GetNote(int id){
-            List<GingerNoteC> Lg = context.GingerNoteT
-                                    .Where( n => n.NoteId == id )
-                                    .Include( n => n.NoteChecklist )
-                                    .Include( n => n.NoteLabel )
-                                    .ToList();
-            return Lg;
+        public GingerNoteC GetNote(int id){
+            return context.GingerNoteT
+                            .Include( n => n.NoteChecklist )
+                            .Include( n => n.NoteLabel )
+                            .FirstOrDefault( n => n.NoteId == id );
         }
         public List<GingerNoteC> GetNoteByTitle(string searchstring, string type){
             List<GingerNoteC> finalLg = new List<GingerNoteC>();

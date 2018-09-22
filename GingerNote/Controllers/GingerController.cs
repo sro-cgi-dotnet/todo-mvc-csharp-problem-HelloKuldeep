@@ -26,14 +26,14 @@ namespace GingerNote.Controllers
 
         // GET api/values/5
         [HttpGet("{id:int}")]
-        public ActionResult<string> Get(int id){
-            List<GingerNoteC> Lg = gingerNoteRepo.GetNote(id);
-            if( Lg.Count > 0 )
+        public IActionResult Get(int id){
+            GingerNoteC Lg = gingerNoteRepo.GetNote(id);
+            if( Lg != null )
                 return Ok(Lg);
             return Ok($"No Ginger With Id:{id} Found.");
         }
         [HttpGet("{searchstring}")]
-        public ActionResult<string> Get(string searchstring, [FromQuery] string type ){
+        public IActionResult Get(string searchstring, [FromQuery] string type ){
             if( type == null ) return BadRequest("Search Parameter Not Given. [?type=title]");
             List<GingerNoteC> Lg = gingerNoteRepo.GetNoteByTitle(searchstring, type);
             if( Lg.Count > 0 )
@@ -52,7 +52,7 @@ namespace GingerNote.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] GingerNoteC Lgn){
+        public IActionResult Put(int id, [FromBody] GingerNoteC Lgn){
             if(ModelState.IsValid){
                 bool val = gingerNoteRepo.PutNote(id, Lgn);
                 if(val)
@@ -65,7 +65,7 @@ namespace GingerNote.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{deletestring}")]
-        public ActionResult Delete(string deletestring){
+        public IActionResult Delete(string deletestring){
             bool temp = gingerNoteRepo.DeleteNote(deletestring);
             List<GingerNoteC> Lg = gingerNoteRepo.GetAllNote();
             if( Lg.Count > 0 ){
