@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/GingerNote/bin/Debug/netcoreapp2.1/GingerNote.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.1/GingerNote.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GingerNote",
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {

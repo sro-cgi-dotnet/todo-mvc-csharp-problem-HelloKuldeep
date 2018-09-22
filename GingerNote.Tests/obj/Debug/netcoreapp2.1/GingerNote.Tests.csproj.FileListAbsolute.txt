@@ -1,0 +1,17 @@
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.Tests.deps.json
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.Tests.runtimeconfig.json
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.Tests.runtimeconfig.dev.json
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.Tests.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.Tests.pdb
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\bin\Debug\netcoreapp2.1\GingerNote.pdb
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.csprojAssemblyReference.cache
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.csproj.CoreCompileInputs.cache
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.AssemblyInfoInputs.cache
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.AssemblyInfo.cs
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.csproj.CopyComplete
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.dll
+C:\Users\CGI\todo-mvc-csharp-problem-HelloKuldeep\GingerNote.Tests\obj\Debug\netcoreapp2.1\GingerNote.Tests.pdb
