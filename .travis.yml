@@ -1,10 +1,10 @@
 language: csharp
-solution: todo-mvc-csharp-problem.sln
+solution: todo-mvc-csharp-problem-HelloKuldeep
 notifications:
   email:
     on_success: always
     on_failure: always
-  # slack: cgiwave6:lcJAQ85bOZutszEwl7lG0qi4
+  slack: cgiwave6:lcJAQ85bOZutszEwl7lG0qi4
 mono: none
 dotnet: 2.1
 script:

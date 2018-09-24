@@ -9,172 +9,239 @@ using Moq;
 namespace GingerNote.Tests
 {
     public class ControllerTests
-    {
-        private List<GingerNoteC> DummyMock(){
-            return new List<GingerNoteC>{
-                new GingerNoteC{
-                    NoteId = 1,
-                    NoteTitle = "WishList",
-                    NoteBody = "Nothing as such",
-                    NoteChecklist = new List<Checklist>{
-                        new Checklist{
-                            ChecklistId = 1,
-                            ChecklistName = "Laptop",
-                            NoteId = 1
-                        }, new Checklist{
-                            ChecklistId = 2,
-                            ChecklistName = "Bike",
-                            NoteId = 1
-                        }
-                    },
-                    NoteLabel = new List<Label>{
-                        new Label{
-                            LabelId = 1,
-                            LabelName = "Casual",
-                            NoteId = 1
-                        }
-                    }
-                },
-                new GingerNoteC{
-                    NoteId = 2,
-                    NoteTitle = "Courses",
-                    NoteChecklist = new List<Checklist>{
-                        new Checklist{
-                            ChecklistId = 3,
-                            ChecklistName = "Bootstrap",
-                            NoteId = 2
-                        }
-                    },
-                    NoteLabel = new List<Label>{
-                        new Label{
-                            LabelId = 2,
-                            LabelName = ".Net",
-                            NoteId = 2
-                        }, new Label{
-                            LabelId = 3,
-                            LabelName = "Casual",
-                            NoteId = 2
-                        }
-                    }
-                }
-            };
-        }
+    {       
         [Fact]
         public void GetAllNote_PositiveTest(){
-            List<GingerNoteC> dummy = DummyMock();  // Arrange
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();  // Arrange
             
             Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
             MockRepository.Setup(d => d.GetAllNote()).Returns(dummy);
             
             GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
             var actual = gingerontroller.Get();
-            
-            Assert.NotNull(actual); // Assert
-            Assert.Equal(2 , dummy.Count);
+
+            var okObjectResult = actual as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+
+            var actualList = okObjectResult.Value as List<GingerNoteC>;
+
+            Assert.NotNull(actualList); // Assert
+            Assert.Equal(actualList.Count , dummy.Count);
         }
         [Fact]
-        public void GetAllNote_NegativeTest(){
-            // List<GingerNoteC> dummy = DummyMock();  // Arrange
+        public void GetAllNote_NegativeTest_One(){  // For Empty Result
+            List<GingerNoteC> dummy = new List<GingerNoteC>();  // Arrange
             
-            // Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
-            // MockRepository.Setup(d => d.GetAllNote()).Returns(dummy);
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
+            MockRepository.Setup(d => d.GetAllNote()).Returns(dummy);
             
-            // GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
-            // var actual = gingerontroller.Get();
+            GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
+            var actual = gingerontroller.Get();
+
+            var okObjectResult = actual as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+
+            var model = okObjectResult.Value as List<GingerNoteC>;
+            Assert.NotNull(model);
+
+            Assert.Equal(dummy.Count, model.Count);
+        }
+        [Fact]
+        public void GetAllNote_NegativeTest_Two(){  // For Database Issue
+            List<GingerNoteC> dummy = null;  // Arrange
             
-            // Assert.NotNull(actual); // Assert
-            // Assert.Equal(2 , dummy.Count);
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
+            MockRepository.Setup(d => d.GetAllNote()).Returns(dummy);
+            
+            GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
+            var actual = gingerontroller.Get();
+            Assert.IsType<NotFoundObjectResult>(actual);
         }
         [Fact]
         public void GetNoteById_PositiveTest(){
-            List<GingerNoteC> dummy = DummyMock();
-            int NoteId = 1;
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();  // Arrange
+            int NoteId = 2;
 
-            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
             MockRepository.Setup(d => d.GetNote(NoteId)).Returns(dummy.FirstOrDefault( d => d.NoteId == NoteId ));
 
-            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
             var actual  = gingerontroller.Get(NoteId);
 
             var okObjectResult = actual as OkObjectResult;
-            Assert.NotNull(okObjectResult);
+            Assert.NotNull(okObjectResult); // Assert
 
-            var model = okObjectResult.Value as Models.GingerNoteC;
-            Assert.NotNull(model);
+            var actualClass = okObjectResult.Value as GingerNoteC;
+            Assert.NotNull(actualClass);
 
-            Assert.Equal( dummy.FirstOrDefault( d => d.NoteId == NoteId ).NoteId , model.NoteId);
+            Assert.Equal( NoteId , actualClass.NoteId );
         }
         [Fact]
-        public void GetNote_NegativeTest(){
-            // List<GingerNoteC> dummy = DummyMock();
-            // int NoteId = 3;
+        public void GetNoteById_NegativeTest(){ 
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();  // Arrange
+            int NoteId = 100;
 
-            // var MockRepository = new Mock<IGingerNoteRepo>();
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>(); // Removing Dependency
+            MockRepository.Setup(d => d.GetNote(NoteId)).Returns(dummy.FirstOrDefault( d => d.NoteId == NoteId ));
+
+            GingerController gingerontroller = new GingerController(MockRepository.Object); // Act
+            var actual  = gingerontroller.Get(NoteId);
+            Assert.IsType<NotFoundObjectResult>(actual);   // Assert
+        }   
+        [Fact]
+        public void GetNoteByTitle_PositiveTest(){ // For Checking Title
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();
+            string notetitle = "WishList";
+            string type = Type.Title;
+
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
+            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,type))
+                            .Returns(dummy.Where( d => d.NoteTitle == notetitle ).ToList());
+
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual  = gingerontroller.Get(notetitle,type);
+
+            var okObjectResult = actual as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+
+            var actualList = okObjectResult.Value as List<GingerNoteC>;
+            Assert.NotNull(actualList);
+
+            Assert.Equal( 1 , actualList.Count);
+        }
+        [Fact]
+        public void GetNoteByTitle_NegativeTest_One(){ // For Some Not Found
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();
+            string notetitle = "SomeRandomSearchStringThatIsNotFound";
+            string type = Type.Title;
+
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
+            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,type))
+                            .Returns(dummy.Where( d => d.NoteTitle == notetitle ).ToList());
+
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual  = gingerontroller.Get(notetitle,type);
+
+            var NotFoundOR = actual as NotFoundObjectResult;
+            Assert.NotNull(NotFoundOR);
+        }
+        [Fact]
+        public void GetNoteByTitle_NegativeTest_Two(){ // For Some Bad Request
+            DummyData DD = new DummyData();
+            List<GingerNoteC> dummy = DD.DummyMock();
+            string notetitle = "SomeRandomSearchStringThatIsNotFound";
+            string type = null;
+
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
+            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,type))
+                            .Returns(dummy);
+
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual  = gingerontroller.Get(notetitle,type);
+
+            var BadRequestOR = actual as BadRequestObjectResult;
+            Assert.NotNull(BadRequestOR);
+        }
+        [Fact]
+        public void PostById_PositiveTest() { // For Returning Created
+            GingerNoteC dummyC = new GingerNoteC{
+                NoteTitle = " -- Xunit-- "
+            };
+
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
             
-            // MockRepository.Setup(d => d.GetNote(NoteId)).Returns(dummy.Find(n => n.NoteId == NoteId));
-            // GingerController gingerontroller = new GingerController(MockRepository.Object);
-            // var actual = gingerontroller.Get(NoteId);
-            // Assert.Null(actual);
+            MockRepository.Setup (d => d.PostNote(dummyC)).Returns (true);
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual = gingerontroller.Post(dummyC);
+
+            var createdResultvar = actual as CreatedResult;
+            Assert.NotNull (createdResultvar);
+
+            var model = createdResultvar.Value as GingerNoteC;
+            Assert.Equal( dummyC.NoteTitle , model.NoteTitle );
         }
         [Fact]
-        public void GetNoteByTitle_PositiveTest(){
-            List<GingerNoteC> dummy = DummyMock();
-            string notetitle = "WishList";
+        public void PostById_NegativeTest() { // For Returning Bad Request
+            GingerNoteC dummyC = new GingerNoteC{
+                NoteTitle = " -- Xunit-- "
+            };
 
             Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
-            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,"title"))
-                            .Returns(dummy.Where( d => d.NoteTitle == notetitle ).ToList());
-
+            
+            MockRepository.Setup (d => d.PostNote(dummyC)).Returns (false);
             GingerController gingerontroller = new GingerController(MockRepository.Object);
-            var actual  = gingerontroller.Get(notetitle,"title");
+            var actual = gingerontroller.Post(dummyC);
 
-            var okObjectResult = actual as OkObjectResult;
-            Assert.NotNull(okObjectResult);
-
-            var model = okObjectResult.Value as Models.GingerNoteC;
-            Assert.NotNull(model);
-
-            Assert.Equal( dummy.FirstOrDefault( d => d.NoteTitle == notetitle ).NoteTitle , model.NoteTitle);
+            var BadRequestOR = actual as BadRequestObjectResult;
+            Assert.NotNull(BadRequestOR);
         }
         [Fact]
-        public void GetNoteByLabel_PositiveTest(){
-            List<GingerNoteC> dummy = DummyMock();
-            string notetitle = "WishList";
+        public void PutById_PositiveTest() { // For Returning Created
+            GingerNoteC dummyC = new GingerNoteC{
+                NoteId = 1,
+                NoteTitle = " -- Xunit-- "
+            };
 
             Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
-            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,"label"))
-                            .Returns(dummy.Where( d => d.NoteTitle == notetitle ).ToList());
 
+            int id = (int)dummyC.NoteId;
+            MockRepository.Setup (d => d.PutNote(id,dummyC)).Returns (true);
             GingerController gingerontroller = new GingerController(MockRepository.Object);
-            var actual  = gingerontroller.Get(notetitle,"label");
+            var actual = gingerontroller.Put(id,dummyC);
 
-            var okObjectResult = actual as OkObjectResult;
-            Assert.NotNull(okObjectResult);
+            var createdResultvar = actual as CreatedResult;
+            Assert.NotNull(createdResultvar);
 
-            var model = okObjectResult.Value as Models.GingerNoteC;
-            Assert.NotNull(model);
-
-            Assert.Equal( dummy.FirstOrDefault( d => d.NoteTitle == notetitle ).NoteTitle , model.NoteTitle);
+            var actualClass = createdResultvar.Value as GingerNoteC;
+            Assert.Equal(id,actualClass.NoteId);
         }
         [Fact]
-        public void GetNotePinned_PositiveTest(){
-            List<GingerNoteC> dummy = DummyMock();
-            string notetitle = "WishList";
+        public void PutById_NegativeTest() { // For Not Found
+            GingerNoteC dummyC = new GingerNoteC{
+                NoteId = 101, // This Dont Exit
+                NoteTitle = " -- Xunit-- "
+            };
 
             Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
-            MockRepository.Setup(d => d.GetNoteByTitle(notetitle,"pinned"))
-                            .Returns(dummy.Where( d => d.NoteTitle == notetitle ).ToList());
 
+            int id = (int)dummyC.NoteId;
+            MockRepository.Setup (d => d.PutNote(id,dummyC)).Returns (false);
             GingerController gingerontroller = new GingerController(MockRepository.Object);
-            var actual  = gingerontroller.Get(notetitle,"pinned");
+            var actual = gingerontroller.Put(id,dummyC);
+
+            var NotFoundOR = actual as NotFoundObjectResult;
+            Assert.NotNull(NotFoundOR);
+        }
+        [Fact]
+        public void DeleteByTitle_PositiveTest() { // For Returning Created
+            string title = "Courses";
+
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
+
+            MockRepository.Setup (d => d.DeleteNote(title)).Returns (true);
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual = gingerontroller.Delete(title);
 
             var okObjectResult = actual as OkObjectResult;
-            Assert.NotNull(okObjectResult);
+            Assert.NotNull (okObjectResult);
+        }
+        [Fact]
+        public void DeleteByTitle_NegativeTest() { // For Returning Not Found
+            string title = "SomeRandomSearchStringThatIsNotFound";
 
-            var model = okObjectResult.Value as Models.GingerNoteC;
-            Assert.NotNull(model);
+            Mock<IGingerNoteRepo> MockRepository = new Mock<IGingerNoteRepo>();
 
-            Assert.Equal( dummy.FirstOrDefault( d => d.NoteTitle == notetitle ).NoteTitle , model.NoteTitle);
+            MockRepository.Setup (d => d.DeleteNote(title)).Returns (false);
+            GingerController gingerontroller = new GingerController(MockRepository.Object);
+            var actual = gingerontroller.Delete(title);
+
+            var NotFoundOR = actual as NotFoundObjectResult;
+            Assert.NotNull (NotFoundOR);
         }
     }
 }

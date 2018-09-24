@@ -97,5 +97,8 @@ namespace GingerNote.Models{
             }
             return false;
         }
+        ~GingerNoteRepo(){ // Deleting DB Context
+            context.Dispose();
+        }
     }
 }

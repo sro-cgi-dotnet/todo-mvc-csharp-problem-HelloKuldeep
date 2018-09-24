@@ -19,9 +19,9 @@ namespace GingerNote.Controllers
         [HttpGet]
         public IActionResult Get(){
             List<GingerNoteC> Lg = gingerNoteRepo.GetAllNote();
-            if( Lg.Count > 0 )
+            if( Lg != null )
                 return Ok(Lg);
-            return Ok("No Ginger Found.");
+            return NotFound("No Ginger Found.");
         }
 
         // GET api/values/5
@@ -30,7 +30,7 @@ namespace GingerNote.Controllers
             GingerNoteC Lg = gingerNoteRepo.GetNote(id);
             if( Lg != null )
                 return Ok(Lg);
-            return Ok($"No Ginger With Id:{id} Found.");
+            return NotFound($"No Ginger With Id:{id} Found.");
         }
         [HttpGet("{searchstring}")]
         public IActionResult Get(string searchstring, [FromQuery] string type ){
@@ -38,7 +38,7 @@ namespace GingerNote.Controllers
             List<GingerNoteC> Lg = gingerNoteRepo.GetNoteByTitle(searchstring, type);
             if( Lg.Count > 0 )
                 return Ok(Lg);
-            return Ok($"No Ginger With Title/Pinned:{searchstring} Found.");
+            return NotFound($"No Ginger With Title/Pinned:{searchstring} Found.");
         }
 
         // POST api/values
@@ -47,7 +47,7 @@ namespace GingerNote.Controllers
             if(gingerNoteRepo.PostNote(g)){
                 return Created("/api/values",g);
             }
-            return BadRequest("Database Error!!");
+            return BadRequest("Database Error!! Note already found.");
         }
 
         // PUT api/values/5
@@ -58,7 +58,7 @@ namespace GingerNote.Controllers
                 if(val)
                     return Created("/api/values",Lgn);
                 else
-                    return BadRequest($"Ginger With Id:{id} Not Found.");
+                    return NotFound($"Ginger With Id:{id} Not Found.");
             }
             return BadRequest("MODE ERROR.");
         }
@@ -67,9 +67,11 @@ namespace GingerNote.Controllers
         [HttpDelete("{deletestring}")]
         public IActionResult Delete(string deletestring){
             bool temp = gingerNoteRepo.DeleteNote(deletestring);
-            List<GingerNoteC> Lg = gingerNoteRepo.GetAllNote();
-            if( Lg.Count > 0 ){
-                return Created("/api/values",Lg);
+            // List<GingerNoteC> Lg = gingerNoteRepo.GetAllNote();
+            // if( Lg.Count > 0 ){
+            if( temp ){
+                // return Created("/api/values",Lg);
+                return Ok($"Note {deletestring} Deleted.");
             }
             return NotFound($"No Title:{deletestring} Found. [or Database Empty]");
         }
